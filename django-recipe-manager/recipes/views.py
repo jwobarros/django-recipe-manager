@@ -9,7 +9,12 @@ from recipes.serializers import (
     IngredientSerializer,
     IngredientPriceSerializer,
     RecipeSerializer,
-    RecipeIngredientSerializer
+    RecipeIngredientSerializer,
+)
+
+from recipes.permissions import (
+    IsIngredientOwnerAndIsAuthenticated,
+    IsRecipeOwnerAndIsAuthenticated,
 )
 
 
@@ -35,6 +40,9 @@ class IngredientDestroyAPIView(BaseIngredientView, RetrieveDestroyAPIView):
 
 class BaseIngredientPriceView:
     serializer_class = IngredientPriceSerializer
+    permission_classes = [
+        IsIngredientOwnerAndIsAuthenticated,
+    ]
 
     def get_queryset(self):
         # return Price list for ingredient
@@ -78,6 +86,9 @@ class RecipeDestroyAPIView(BaseRecipeView, RetrieveDestroyAPIView):
 
 class BaseRecipeIngredientView:
     serializer_class = RecipeIngredientSerializer
+    permission_classes = [
+        IsRecipeOwnerAndIsAuthenticated,
+    ]
 
     def get_queryset(self):
         # return RecipeIngredient list for current recipe
