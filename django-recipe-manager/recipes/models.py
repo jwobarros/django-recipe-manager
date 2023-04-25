@@ -8,6 +8,7 @@ MEASUREMENT_CHOICES = (
     ("kg", "kilogram"),
     ("lb", "Pound"),
     ("oz", "Ounce"),
+    ("cl", "Centiliter"),
     ("ml", "Milliliter"),
     ("l", "Liter"),
     ("fl. oz", "Fluid Ounce"),
@@ -22,10 +23,10 @@ MEASUREMENT_CHOICES = (
 )
 
 
-class Product(models.Model):
+class Ingredient(models.Model):
     name = models.CharField(max_length=30)
     description = models.TextField(max_length=300, blank=True, null=True)
-    article_number = models.PositiveBigIntegerField(blank=True, null=True)
+    article_number = models.PositiveBigIntegerField(blank=True, null=True, unique=True)
     measurement = models.CharField(max_length=10, choices=MEASUREMENT_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(
@@ -39,19 +40,15 @@ class Product(models.Model):
         return self.name
 
 
-class ProductPrice(models.Model):
-    product = models.ForeignKey(
-        Product, related_name="product", on_delete=models.CASCADE
+class IngredientPrice(models.Model):
+    ingredient = models.ForeignKey(
+        Ingredient, related_name="ingredient", on_delete=models.CASCADE
     )
     price = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
 
-    @property
-    def measurement(self):
-        pass
-
     def __str__(self):
-        return self.product.name
+        return self.ingredient.name
 
 
 class Recipe(models.Model):
@@ -69,10 +66,10 @@ class Recipe(models.Model):
         return self.name
 
 
-class RecipeProduct(models.Model):
+class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(Recipe, related_name="recipe", on_delete=models.CASCADE)
-    product = models.ForeignKey(
-        Product, related_name="recipe_product", on_delete=models.CASCADE
+    ingredient = models.ForeignKey(
+        Ingredient, related_name="recipe_ingredient", on_delete=models.CASCADE
     )
     quantity = models.IntegerField()
     measurement = models.CharField(max_length=10, choices=MEASUREMENT_CHOICES)
