@@ -49,7 +49,9 @@ class IngredientPriceSerializer(serializers.HyperlinkedModelSerializer):
             .choices.get(self.validated_data["measurement"])
             .lower()
         )
-        product_measurement = self.validated_data["ingredient"].get_measurement_display().lower()
+        product_measurement = (
+            self.validated_data["ingredient"].get_measurement_display().lower()
+        )
 
         try:
             self.validated_data["price"] = convert_price(

@@ -19,7 +19,6 @@ urlpatterns = [
         views.IngredientDestroyAPIView.as_view(),
         name="ingredient_delete",
     ),
-
     # Ingredient Price Views
     path(
         "ingredients/<int:ingredient_pk>/prices/",
@@ -36,7 +35,6 @@ urlpatterns = [
         views.IngredientPriceDestroyAPIView.as_view(),
         name="ingredient_price_delete",
     ),
-
     # Recipes views
     path(
         "recipes/",
@@ -53,7 +51,6 @@ urlpatterns = [
         views.RecipeDestroyAPIView.as_view(),
         name="recipe_delete",
     ),
-
     # Recipe Ingredient views
     path(
         "recipes/<int:recipe_pk>/ingredients/",
