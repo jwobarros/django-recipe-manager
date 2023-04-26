@@ -91,15 +91,17 @@ class CurrentRecipeField:
             .parser_context.get("kwargs")
             .get("recipe_pk")
         )
-        return RecipeIngredient.objects.get(pk=recipe_pk)
+        return Recipe.objects.get(pk=recipe_pk)
 
     def __repr__(self):
         return "%s()" % self.__class__.__name__
 
 
 class RecipeIngredientSerializer(serializers.HyperlinkedModelSerializer):
-    ingredient = serializers.HiddenField(default=CurrentRecipeField())
+    measurement = serializers.ChoiceField(choices=MEASUREMENT_CHOICES, write_only=True)
+    recipe = serializers.HiddenField(default=CurrentRecipeField())
+    ingredient = serializers.PrimaryKeyRelatedField(queryset=Ingredient.objects.all())
 
     class Meta:
         model = RecipeIngredient
-        fields = ["id", "ingredient", "quantity", "measurement"]
+        fields = ["id", "ingredient", "quantity", "measurement", "recipe"]

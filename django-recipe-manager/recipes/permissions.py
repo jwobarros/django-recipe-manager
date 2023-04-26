@@ -27,6 +27,4 @@ class IsRecipeOwnerAndIsAuthenticated(BasePermission):
             ).user
             == request.user
         )
-        return bool(
-            request.user and request.user.is_authenticated and is_recipe_owner
-        )
+        return bool(request.user and request.user.is_authenticated and is_recipe_owner)
