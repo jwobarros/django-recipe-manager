@@ -1,1 +1,1 @@
-web: gunicorn core.wsgi
+web: gunicorn django-recipe-manager/core.wsgi
