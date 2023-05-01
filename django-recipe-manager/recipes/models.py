@@ -25,7 +25,7 @@ MEASUREMENT_CHOICES = (
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=30)
-    description = models.TextField(max_length=300, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     article_number = models.PositiveBigIntegerField(blank=True, null=True, unique=True)
     measurement = models.CharField(max_length=10, choices=MEASUREMENT_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -53,7 +53,7 @@ class IngredientPrice(models.Model):
 
 class Recipe(models.Model):
     name = models.CharField(max_length=30)
-    description = models.TextField(max_length=300, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
