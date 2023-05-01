@@ -15,7 +15,7 @@ from rest_framework import serializers
 
 class AsymetricRelatedField(serializers.PrimaryKeyRelatedField):
 
-    """This field returns the object details but recives just pk from requests """
+    """This field returns the object details but recives just pk from requests"""
 
     def __init__(self, **kwargs):
         self.serializer_class = kwargs.pop("serializer_class")
@@ -51,13 +51,7 @@ class AsymetricRelatedField(serializers.PrimaryKeyRelatedField):
         if cutoff is not None:
             queryset = queryset[:cutoff]
 
-        return OrderedDict([
-            (
-                item.pk,
-                self.display_value(item)
-            )
-            for item in queryset
-        ])
+        return OrderedDict([(item.pk, self.display_value(item)) for item in queryset])
 
     def use_pk_only_optimization(self):
         return False
@@ -120,7 +114,7 @@ class IngredientPriceSerializer(serializers.HyperlinkedModelSerializer):
                 value=self.validated_data["price"],
                 from_unit=price_measurement,
                 to_unit=default_measurement,
-                is_price_conversion=True
+                is_price_conversion=True,
             )
         except UnsupportedUnitConvertion:
             raise serializers.ValidationError(
@@ -161,7 +155,6 @@ class CurrentRecipeField:
 
 
 class IngredientsByUser(AsymetricRelatedField):
-
     serializer_class = IngredientSerializer
     filter_by_user = True
 
@@ -169,12 +162,15 @@ class IngredientsByUser(AsymetricRelatedField):
 class RecipeIngredientSerializer(serializers.HyperlinkedModelSerializer):
     measurement = serializers.ChoiceField(choices=MEASUREMENT_CHOICES, write_only=True)
     recipe = serializers.HiddenField(default=CurrentRecipeField())
-    ingredient = AsymetricRelatedField(serializer_class=IngredientSerializer, filter_by_user=True)
-    cost = serializers.SerializerMethodField('get_ingredient_cost')
-
+    ingredient = AsymetricRelatedField(
+        serializer_class=IngredientSerializer, filter_by_user=True
+    )
+    cost = serializers.SerializerMethodField("get_ingredient_cost")
 
     def get_ingredient_cost(self, obj):
-        latest_price = IngredientPrice.objects.filter(ingredient=obj.ingredient).latest('created_at')
+        latest_price = IngredientPrice.objects.filter(ingredient=obj.ingredient).latest(
+            "created_at"
+        )
         return round(latest_price.price * obj.quantity, 2)
 
     class Meta:
