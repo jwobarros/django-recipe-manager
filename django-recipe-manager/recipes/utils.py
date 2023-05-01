@@ -113,7 +113,7 @@ class UnsupportedUnitConvertion(Exception):
     pass
 
 
-def convert_price(value, from_unit, to_unit):
+def convert_measurement(value, from_unit, to_unit, is_price_conversion=False):
     # Return the value if dont need to convert
     if from_unit == to_unit:
         return value
@@ -122,7 +122,9 @@ def convert_price(value, from_unit, to_unit):
     if from_unit in CONVERSION_FACTORS and to_unit in CONVERSION_FACTORS[from_unit]:
         # Calculate the conversion factor and return the value rounded to 5 decimal places.
         factor = CONVERSION_FACTORS[from_unit][to_unit]
-        return round(value / factor, 5)
+        if is_price_conversion:
+            return round(value / factor, 5)
+        return round(value * factor, 5)
     else:
         # Raise an exception if the units are not supported.
         raise UnsupportedUnitConvertion
