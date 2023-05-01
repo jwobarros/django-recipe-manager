@@ -170,7 +170,7 @@ class RecipeIngredientSerializer(serializers.HyperlinkedModelSerializer):
     def get_ingredient_cost(self, obj):
         latest_price = IngredientPrice.objects.filter(ingredient=obj.ingredient).latest(
             "created_at"
-        )
+        ) or 0
         return round(latest_price.price * obj.quantity, 2)
 
     class Meta:
