@@ -103,7 +103,7 @@ class RecipeIngredientViewsTestCase(APITestCase):
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data["ingredient"], data["ingredient"])
+        self.assertEqual(response.data["ingredient"].get("id"), data["ingredient"])
         self.assertEqual(response.data["quantity"], data["quantity"])
 
     def test_update_recipe_ingredient(self):
